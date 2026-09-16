@@ -10,10 +10,9 @@ services:
     network_mode: "host" # Wajib agar multicast DDS discovery berfungsi antar host/container
     environment:
       - SHIP_ID=${SHIP_ID}
-      - CYCLONEDDS_URI=file:///etc/cyclonedds/cyclonedds_auth.xml
+      - CYCLONEDDS_URI=file:///etc/cyclonedds/cyclonedds.xml
     volumes:
       - ./cyclonedds.xml:/etc/cyclonedds/cyclonedds.xml:ro
-      - ./cyclonedds_auth.xml:/etc/cyclonedds/cyclonedds_auth.xml:ro
       - ${CERTS_PATH}:/etc/cyclonedds/certs:ro
     stdin_open: true    # Mencegah EOF error pada std::cin
     tty: true           # Memungkinkan tampilan menu console interaktif
