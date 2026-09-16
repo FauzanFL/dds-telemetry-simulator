@@ -7,7 +7,7 @@
   <Domain Id="0">
     <General>
       <Interfaces>
-        <NetworkInterface name="eth3"  priority="default" multicast="default" />
+        <NetworkInterface name="auto"  priority="default" multicast="default" />
       </Interfaces>
       <AllowMulticast>true</AllowMulticast>
       <MaxMessageSize>65500B</MaxMessageSize>
