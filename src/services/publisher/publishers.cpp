@@ -134,7 +134,7 @@ void TargetTrackPub::run() {
         std::cin.get();
         running = false;
     });
-    while (true) {
+    while (running) {
         Tactical::TargetTrack data(distDist(rng), bearDist(rng), latDist(rng), lonDist(rng));
         writer.write(data);
         std::cout << "[PUBLISH TargetTrack]"
