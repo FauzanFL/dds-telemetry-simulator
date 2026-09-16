@@ -50,9 +50,10 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 # Copy hasil executable aplikasi
 WORKDIR /app
 COPY --from=builder /app/build/dds_telemetry_simulator .
+COPY entrypoint.sh /entrypoint.sh
 
 # Update dynamic linker cache & set environment path
 ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
 # Entrypoint aplikasi
-ENTRYPOINT ["./dds_telemetry_simulator"]
+ENTRYPOINT ["/entrypoint.sh", "./dds_telemetry_simulator"]
