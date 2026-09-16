@@ -11,6 +11,10 @@ void clearInputStream() {
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
+void prepareInputStream() {
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
+
 int main() {
     try {
         dds::domain::DomainParticipant participant(0);
@@ -34,6 +38,7 @@ int main() {
             if (mainChoice == 0) break;
 
             if (mainChoice == 1) {
+                prepareInputStream();
                 MasterSubscriber subscriber(participant);
                 subscriber.listen();
             } else if (mainChoice == 2) {
@@ -69,6 +74,7 @@ int main() {
                 }
 
                 if (publisher) {
+                    prepareInputStream();
                     publisher->run();
                 }
             } else {

@@ -30,15 +30,23 @@ void MasterSubscriber::listen() {
 
     std::cout << "\n==================================================\n";
     std::cout << "   MASTER SUBSCRIBER AKTIF - MENDENGARKAN TOPIC   \n";
+    std::cout << ">>> Tekan [ENTER] kapan saja untuk kembali ke Menu <<<\n";
     std::cout << "==================================================\n\n";
 
-    while (true) {
+    std::atomic<bool> running{true};
+
+    std::thread inputThread([&running]() {
+        std::cin.get();
+        running = false;
+    });
+
+    while (running) {
         // Read MissionRoute
         auto samplesRoute = readerRoute.take();
         for (const auto& sample : samplesRoute) {
             if (sample.info().valid()) {
                 const auto& data = sample.data();
-                std::cout << "[TOPIC: MissionRoute] ID: " << data.id()
+                std::cout << "[TOPIC: MissionRoute] ShipID: " << data.ship_id()
                           << " | Waypoint: " << data.waypoint()
                           << " | Lat: " << data.latitude()
                           << " | Lon: " << data.longitude() << "\n";
@@ -97,4 +105,9 @@ void MasterSubscriber::listen() {
 
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
     }
+
+    if (inputThread.joinable()) {
+        inputThread.join();
+    }
+    std::cout << "\n[INFO] Master Subscriber dihentikan. Kembali ke menu...\n";
 }

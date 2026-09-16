@@ -15,7 +15,7 @@ void MissionRoutePub::run() {
 
     Ship::MissionRoute data;
     std::cout << "\n--- Input MissionRoute ---\n";
-    std::cout << "ID: "; std::cin >> data.id();
+    std::cout << "ShipID: "; std::cin >> data.ship_id();
     std::cout << "Waypoint: "; std::cin >> data.waypoint();
     std::cout << "Latitude: "; std::cin >> data.latitude();
     std::cout << "Longitude: "; std::cin >> data.longitude();
@@ -81,13 +81,33 @@ void TelemetryPub::run() {
     std::string ship_id = (env_ship_id != nullptr) ? std::string(env_ship_id) : "SHIP-DEFAULT";
 
     std::cout << "\n[INFO] Memulai transmisi Telemetry Data otomatis (tiap 3 detik). Tekan Ctrl+C untuk berhenti.\n";
-    while (true) {
+    std::cout << ">>> Tekan [ENTER] kapan saja untuk kembali ke Menu Utama <<<\n\n";
+
+    std::atomic<bool> running{true};
+
+    // Thread pendengar tombol ENTER
+    std::thread inputThread([&running]() {
+        std::cin.get();
+        running = false;
+    });
+
+    while (running) {
         Ship::Telemetry data(ship_id, speedDist(rng), headDist(rng));
         writer.write(data);
         std::cout << "[PUBLISH Telemetry] ShipID: " << data.ship_id()
                   << " | Speed: " << data.speed() << " knots | Heading: " << data.heading() << " deg\n";
         std::this_thread::sleep_for(std::chrono::seconds(3));
+
+        // Cek flag per 100ms agar responsif saat user menekan ENTER
+        for (int i = 0; i < 30 && running; ++i) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        }
     }
+
+    if (inputThread.joinable()) {
+        inputThread.join();
+    }
+    std::cout << "\n[INFO] Menghentikan simulasi Telemetry Data...\n";
 }
 
 void TargetTrackPub::run() {
@@ -104,13 +124,29 @@ void TargetTrackPub::run() {
     std::uniform_real_distribution<double> latDist(-7.5, -6.5);
     std::uniform_real_distribution<double> lonDist(110.0, 111.0);
 
-    std::cout << "\n[INFO] Memulai transmisi TargetTrack otomatis (tiap 3 detik). Tekan Ctrl+C untuk berhenti.\n";
+    std::cout << "\n[INFO] Memulai transmisi TargetTrack otomatis (tiap 3 detik).\n";
+    std::cout << ">>> Tekan [ENTER] kapan saja untuk kembali ke Menu Utama <<<\n\n";
+
+    std::atomic<bool> running{true};
+
+    // Thread pendengar tombol ENTER
+    std::thread inputThread([&running]() {
+        std::cin.get();
+        running = false;
+    });
     while (true) {
         Tactical::TargetTrack data(distDist(rng), bearDist(rng), latDist(rng), lonDist(rng));
         writer.write(data);
         std::cout << "[PUBLISH TargetTrack]"
                   << " | Distance: " << data.distance() << " m | Bearing: " << data.bearing()
                   << " deg | Latitude: " << data.latitude() << " | Longitude: " << data.longitude() << "\n";
-        std::this_thread::sleep_for(std::chrono::seconds(3));
+        for (int i = 0; i < 30 && running; ++i) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        }
     }
+
+    if (inputThread.joinable()) {
+        inputThread.join();
+    }
+    std::cout << "\n[INFO] Menghentikan simulasi TargetTrack...\n";
 }
