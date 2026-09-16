@@ -3,6 +3,8 @@
 #include <thread>
 #include <chrono>
 #include <random>
+#include <atomic>
+#include <limits>
 
 // Grup 1: Reliable & TransientLocal (Manual Input)
 void MissionRoutePub::run() {
@@ -11,7 +13,7 @@ void MissionRoutePub::run() {
     dds::pub::qos::DataWriterQos qos = publisher.default_datawriter_qos()
                                        << dds::core::policy::Reliability::Reliable()
                                        << dds::core::policy::Durability::TransientLocal();
-    dds::pub::DataWriter<Ship::MissionRoute> writer(dds::pub::Publisher(participant_), topic, qos);
+    dds::pub::DataWriter<Ship::MissionRoute> writer(publisher, topic, qos);
 
     Ship::MissionRoute data;
     std::cout << "\n--- Input MissionRoute ---\n";
@@ -22,6 +24,8 @@ void MissionRoutePub::run() {
 
     writer.write(data);
     std::cout << "[SUCCESS] Data MissionRoute terkirim!\n";
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::cin.get();
 }
 
 void RCWSCommandPub::run() {
@@ -30,7 +34,7 @@ void RCWSCommandPub::run() {
     dds::pub::qos::DataWriterQos qos = publisher.default_datawriter_qos()
                                        << dds::core::policy::Reliability::Reliable()
                                        << dds::core::policy::Durability::TransientLocal();
-    dds::pub::DataWriter<Weapon::RCWSCommand> writer(dds::pub::Publisher(participant_), topic, qos);
+    dds::pub::DataWriter<Weapon::RCWSCommand> writer(publisher, topic, qos);
 
     Weapon::RCWSCommand data;
     std::cout << "\n--- Input RCWSCommand ---\n";
@@ -43,6 +47,8 @@ void RCWSCommandPub::run() {
 
     writer.write(data);
     std::cout << "[SUCCESS] Data RCWSCommand terkirim!\n";
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::cin.get();
 }
 
 void RCWSStatusPub::run() {
@@ -51,7 +57,7 @@ void RCWSStatusPub::run() {
     dds::pub::qos::DataWriterQos qos = publisher.default_datawriter_qos()
                                        << dds::core::policy::Reliability::Reliable()
                                        << dds::core::policy::Durability::TransientLocal();
-    dds::pub::DataWriter<Weapon::RCWSStatus> writer(dds::pub::Publisher(participant_), topic, qos);
+    dds::pub::DataWriter<Weapon::RCWSStatus> writer(publisher, topic, qos);
 
     Weapon::RCWSStatus data;
     std::cout << "\n--- Input RCWSStatus ---\n";
@@ -62,6 +68,8 @@ void RCWSStatusPub::run() {
 
     writer.write(data);
     std::cout << "[SUCCESS] Data RCWSStatus terkirim!\n";
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::cin.get();
 }
 
 // Grup 2: BestEffort & Volatile (Random Setiap 3 Detik)
@@ -71,7 +79,7 @@ void TelemetryPub::run() {
     dds::pub::qos::DataWriterQos qos = publisher.default_datawriter_qos()
                                        << dds::core::policy::Reliability::BestEffort()
                                        << dds::core::policy::Durability::Volatile();
-    dds::pub::DataWriter<Ship::Telemetry> writer(dds::pub::Publisher(participant_), topic, qos);
+    dds::pub::DataWriter<Ship::Telemetry> writer(publisher, topic, qos);
 
     std::mt19937 rng(std::random_device{}());
     std::uniform_real_distribution<double> speedDist(10.0, 40.0);
@@ -96,7 +104,6 @@ void TelemetryPub::run() {
         writer.write(data);
         std::cout << "[PUBLISH Telemetry] ShipID: " << data.ship_id()
                   << " | Speed: " << data.speed() << " knots | Heading: " << data.heading() << " deg\n";
-        std::this_thread::sleep_for(std::chrono::seconds(3));
 
         // Cek flag per 100ms agar responsif saat user menekan ENTER
         for (int i = 0; i < 30 && running; ++i) {
@@ -116,7 +123,7 @@ void TargetTrackPub::run() {
     dds::pub::qos::DataWriterQos qos = publisher.default_datawriter_qos()
                                        << dds::core::policy::Reliability::BestEffort()
                                        << dds::core::policy::Durability::Volatile();
-    dds::pub::DataWriter<Tactical::TargetTrack> writer(dds::pub::Publisher(participant_), topic, qos);
+    dds::pub::DataWriter<Tactical::TargetTrack> writer(publisher, topic, qos);
 
     std::mt19937 rng(std::random_device{}());
     std::uniform_real_distribution<double> distDist(100.0, 5000.0);
