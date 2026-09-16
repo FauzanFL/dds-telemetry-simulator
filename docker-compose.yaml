@@ -9,6 +9,7 @@ services:
     container_name: dds_app_sim
     network_mode: "host" # Wajib agar multicast DDS discovery berfungsi antar host/container
     environment:
+      - TERM=xterm-256color
       - SHIP_ID=${SHIP_ID}
       - CYCLONEDDS_URI=file:///etc/cyclonedds/cyclonedds.xml
     volumes:
