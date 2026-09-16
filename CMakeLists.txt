@@ -21,14 +21,15 @@ idlcxx_generate(
     idl/Telemetry.idl
 )
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
-
 add_executable(dds_telemetry_simulator
-  main.cpp
+  src/main.cpp
+  src/services/subscriber/isubscriber.h
+  src/services/publisher/ipublisher.h
+  src/services/publisher/publishers.h src/services/publisher/publishers.cpp
+  src/services/subscriber/mastersubscriber.h src/services/subscriber/mastersubscriber.cpp
+  src/main.cpp
 )
 target_link_libraries(dds_telemetry_simulator PRIVATE
-    Qt${QT_VERSION_MAJOR}::Core
     CycloneDDS-CXX::ddscxx
     generated_idl)
 

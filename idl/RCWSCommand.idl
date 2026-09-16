@@ -1,5 +1,6 @@
 module Weapon {
     struct RCWSCommand {
+        @key string ship_id;
         @key string rcws_id;
         @key string command_id;
         double azimuth;

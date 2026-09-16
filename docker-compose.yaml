@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  dds_simulator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: dds-simulator-app:latest
+    container_name: dds_app_sim
+    network_mode: "host" # Wajib agar multicast DDS discovery berfungsi antar host/container
+    environment:
+      - SHIP_ID=SHIP-2
+    stdin_open: true    # Mencegah EOF error pada std::cin
+    tty: true           # Memungkinkan tampilan menu console interaktif
