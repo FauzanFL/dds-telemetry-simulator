@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CycloneDDS
+  xmlns="https://cdds.io/config"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="https://cdds.io/config https://raw.githubusercontent.com/eclipse-cyclonedds/cyclonedds/master/etc/cyclonedds.xsd"
+>
+  <Domain Id="0">
+    <General>
+      <Interfaces>
+        <NetworkInterface name="eth3"  priority="default" multicast="default" />
+      </Interfaces>
+      <AllowMulticast>true</AllowMulticast>
+      <MaxMessageSize>65500B</MaxMessageSize>
+    </General>
+    <Discovery>
+      <LeaseDuration>3 s</LeaseDuration>
+    </Discovery>
+    <Security>
+            <!-- Konfigurasi Authentication -->
+            <Authentication>
+                <!-- Menunjuk ke CA Certificate yang baru dibuat untuk verifikasi identitas node -->
+                <IdentityCA>file:///etc/cyclonedds/certs/ca.crt</IdentityCA>
+
+                <!-- Sertifikat dan Private Key milik Node spesifik (VM 1 atau VM 2) -->
+                <IdentityCertificate>file:///etc/cyclonedds/certs/node.crt</IdentityCertificate>
+                <PrivateKey>file:///etc/cyclonedds/certs/node.key</PrivateKey>
+            </Authentication>
+
+            <!-- Konfigurasi Access Control -->
+            <AccessControl>
+                <!-- Menunjuk ke CA Certificate yang sama untuk verifikasi Governance dan Permissions -->
+                <PermissionsCA>file:///etc/cyclonedds/certs/ca.crt</PermissionsCA>
+
+                <!-- File aturan akses terenkripsi -->
+                <Governance>file:///etc/cyclonedds/certs/governance.p7s</Governance>
+                <Permissions>file:///etc/cyclonedds/certs/permissions.p7s</Permissions>
+            </AccessControl>
+        </Security>
+    <Tracing>
+      <Verbosity>config</Verbosity>
+      <OutputFile>
+        /tmp/cdds.log.${CYCLONEDDS_PID}
+      </OutputFile>
+    </Tracing>
+  </Domain>
+</CycloneDDS>
