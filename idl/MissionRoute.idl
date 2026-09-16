@@ -1,0 +1,8 @@
+module Ship {
+    struct MissionRoute {
+        @key string id;
+        string waypoint;
+        double latitude;
+        double longitude;
+    };
+};

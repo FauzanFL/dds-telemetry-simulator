@@ -1,0 +1,7 @@
+module Ship {
+    struct Telemetry {
+        @key string ship_id;
+        double speed;
+        double heading;
+    };
+};

@@ -1,0 +1,9 @@
+module Weapon {
+    struct RCWSCommand {
+        @key string rcws_id;
+        @key string command_id;
+        double azimuth;
+        double elevation;
+        double range;
+    };
+};
