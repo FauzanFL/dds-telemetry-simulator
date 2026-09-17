@@ -78,7 +78,9 @@ void MasterSubscriber::listen() {
                 const auto& data = sample.data();
                 std::cout << "[TOPIC: Telemetry] ShipID: " << data.ship_id()
                           << " | Speed: " << data.speed() << " knots"
-                          << " | Heading: " << data.heading() << "\n";
+                          << " | Heading: " << data.heading() << " deg"
+                          << " | Lat: " << data.latitude()
+                          << " | Lon: " << data.longitude() << "\n";
             }
         }
 

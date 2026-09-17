@@ -3,5 +3,7 @@ module Ship {
         @key string ship_id;
         double speed;
         double heading;
+	double latitude;
+	double longitude;
     };
 };

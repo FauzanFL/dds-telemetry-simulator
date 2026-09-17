@@ -74,6 +74,8 @@ void TelemetryPub::run() {
     std::mt19937 rng(std::random_device{}());
     std::uniform_real_distribution<double> speedDist(10.0, 40.0);
     std::uniform_real_distribution<double> headDist(0.0, 360.0);
+    std::uniform_real_distribution<double> latDist(-7.5, -5.5);
+    std::uniform_real_distribution<double> lonDist(110.0, 112.0);
 
     const char* env_ship_id = std::getenv("SHIP_ID");
     std::string ship_id = (env_ship_id != nullptr) ? std::string(env_ship_id) : "SHIP-DEFAULT";
@@ -90,10 +92,12 @@ void TelemetryPub::run() {
     });
 
     while (running) {
-        Ship::Telemetry data(ship_id, speedDist(rng), headDist(rng));
+        Ship::Telemetry data(ship_id, speedDist(rng), headDist(rng), latDist(rng), lonDist(rng));
         writer.write(data);
         std::cout << "[PUBLISH Telemetry] ShipID: " << data.ship_id()
-                  << " | Speed: " << data.speed() << " knots | Heading: " << data.heading() << " deg\n";
+                  << " | Speed: " << data.speed() << " knots | Heading: " << data.heading() << " deg"
+                  << " | Latitude: " << data.latitude()
+                  << " | Longitude: " << data.longitude() << "\n";
 
         // Cek flag per 100ms agar responsif saat user menekan ENTER
         for (int i = 0; i < 30 && running; ++i) {
