@@ -6,14 +6,13 @@
 #include <atomic>
 #include <limits>
 
+#include "../../config/qos_profiles.h"
+
 // Grup 1: Reliable & TransientLocal (Manual Input)
 void MissionRoutePub::run() {
     dds::topic::Topic<Ship::MissionRoute> topic(participant_, "Ship/MissionRoute");
     dds::pub::Publisher publisher(participant_);
-    dds::pub::qos::DataWriterQos qos = publisher.default_datawriter_qos()
-                                       << dds::core::policy::Reliability::Reliable()
-                                       << dds::core::policy::Durability::TransientLocal();
-    dds::pub::DataWriter<Ship::MissionRoute> writer(publisher, topic, qos);
+    dds::pub::DataWriter<Ship::MissionRoute> writer(publisher, topic, QoSProfile::MissionRoutePub(publisher));
 
     Ship::MissionRoute data;
     std::cout << "\n--- Input MissionRoute ---\n";
@@ -31,10 +30,7 @@ void MissionRoutePub::run() {
 void RCWSCommandPub::run() {
     dds::topic::Topic<Weapon::RCWSCommand> topic(participant_, "Weapon/RCWSCommand");
     dds::pub::Publisher publisher(participant_);
-    dds::pub::qos::DataWriterQos qos = publisher.default_datawriter_qos()
-                                       << dds::core::policy::Reliability::Reliable()
-                                       << dds::core::policy::Durability::TransientLocal();
-    dds::pub::DataWriter<Weapon::RCWSCommand> writer(publisher, topic, qos);
+    dds::pub::DataWriter<Weapon::RCWSCommand> writer(publisher, topic, QoSProfile::RCWSCommandPub(publisher));
 
     Weapon::RCWSCommand data;
     std::cout << "\n--- Input RCWSCommand ---\n";
@@ -54,10 +50,7 @@ void RCWSCommandPub::run() {
 void RCWSStatusPub::run() {
     dds::topic::Topic<Weapon::RCWSStatus> topic(participant_, "Weapon/RCWSStatus");
     dds::pub::Publisher publisher(participant_);
-    dds::pub::qos::DataWriterQos qos = publisher.default_datawriter_qos()
-                                       << dds::core::policy::Reliability::Reliable()
-                                       << dds::core::policy::Durability::TransientLocal();
-    dds::pub::DataWriter<Weapon::RCWSStatus> writer(publisher, topic, qos);
+    dds::pub::DataWriter<Weapon::RCWSStatus> writer(publisher, topic, QoSProfile::RCWSStatusPub(publisher));
 
     Weapon::RCWSStatus data;
     std::cout << "\n--- Input RCWSStatus ---\n";
@@ -76,10 +69,7 @@ void RCWSStatusPub::run() {
 void TelemetryPub::run() {
     dds::topic::Topic<Ship::Telemetry> topic(participant_, "Ship/Telemetry");
     dds::pub::Publisher publisher(participant_);
-    dds::pub::qos::DataWriterQos qos = publisher.default_datawriter_qos()
-                                       << dds::core::policy::Reliability::BestEffort()
-                                       << dds::core::policy::Durability::Volatile();
-    dds::pub::DataWriter<Ship::Telemetry> writer(publisher, topic, qos);
+    dds::pub::DataWriter<Ship::Telemetry> writer(publisher, topic, QoSProfile::TelemetryPub(publisher));
 
     std::mt19937 rng(std::random_device{}());
     std::uniform_real_distribution<double> speedDist(10.0, 40.0);
@@ -120,10 +110,7 @@ void TelemetryPub::run() {
 void TargetTrackPub::run() {
     dds::topic::Topic<Tactical::TargetTrack> topic(participant_, "Tactical/TargetTrack");
     dds::pub::Publisher publisher(participant_);
-    dds::pub::qos::DataWriterQos qos = publisher.default_datawriter_qos()
-                                       << dds::core::policy::Reliability::BestEffort()
-                                       << dds::core::policy::Durability::Volatile();
-    dds::pub::DataWriter<Tactical::TargetTrack> writer(publisher, topic, qos);
+    dds::pub::DataWriter<Tactical::TargetTrack> writer(publisher, topic, QoSProfile::TargetTrackPub(publisher));
 
     std::mt19937 rng(std::random_device{}());
     std::uniform_real_distribution<double> distDist(100.0, 5000.0);

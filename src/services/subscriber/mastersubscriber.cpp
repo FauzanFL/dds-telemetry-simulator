@@ -4,6 +4,7 @@
 #include "RCWSStatus.hpp"
 #include "Telemetry.hpp"
 #include "TargetTrack.hpp"
+#include "../../config/qos_profiles.h"
 
 #include <iostream>
 #include <thread>
@@ -12,21 +13,12 @@
 void MasterSubscriber::listen() {
     dds::sub::Subscriber sub(participant_);
 
-    // QoS Setup
-    dds::sub::qos::DataReaderQos qosReliable = sub.default_datareader_qos()
-                                               << dds::core::policy::Reliability::Reliable()
-                                               << dds::core::policy::Durability::TransientLocal();
-
-    dds::sub::qos::DataReaderQos qosBestEffort = sub.default_datareader_qos()
-                                                 << dds::core::policy::Reliability::BestEffort()
-                                                 << dds::core::policy::Durability::Volatile();
-
     // Readers Definition
-    dds::sub::DataReader<Ship::MissionRoute> readerRoute(sub, dds::topic::Topic<Ship::MissionRoute>(participant_, "Ship/MissionRoute"), qosReliable);
-    dds::sub::DataReader<Weapon::RCWSCommand> readerCmd(sub, dds::topic::Topic<Weapon::RCWSCommand>(participant_, "Weapon/RCWSCommand"), qosReliable);
-    dds::sub::DataReader<Weapon::RCWSStatus> readerStat(sub, dds::topic::Topic<Weapon::RCWSStatus>(participant_, "Weapon/RCWSStatus"), qosReliable);
-    dds::sub::DataReader<Ship::Telemetry> readerTelem(sub, dds::topic::Topic<Ship::Telemetry>(participant_, "Ship/Telemetry"), qosBestEffort);
-    dds::sub::DataReader<Tactical::TargetTrack> readerTarget(sub, dds::topic::Topic<Tactical::TargetTrack>(participant_, "Tactical/TargetTrack"), qosBestEffort);
+    dds::sub::DataReader<Ship::MissionRoute> readerRoute(sub, dds::topic::Topic<Ship::MissionRoute>(participant_, "Ship/MissionRoute"), QoSProfile::ReliableTransientLocalSub(sub));
+    dds::sub::DataReader<Weapon::RCWSCommand> readerCmd(sub, dds::topic::Topic<Weapon::RCWSCommand>(participant_, "Weapon/RCWSCommand"), QoSProfile::ReliableTransientLocalSub(sub));
+    dds::sub::DataReader<Weapon::RCWSStatus> readerStat(sub, dds::topic::Topic<Weapon::RCWSStatus>(participant_, "Weapon/RCWSStatus"), QoSProfile::ReliableTransientLocalSub(sub));
+    dds::sub::DataReader<Ship::Telemetry> readerTelem(sub, dds::topic::Topic<Ship::Telemetry>(participant_, "Ship/Telemetry"), QoSProfile::BestEffortVolatileSub(sub));
+    dds::sub::DataReader<Tactical::TargetTrack> readerTarget(sub, dds::topic::Topic<Tactical::TargetTrack>(participant_, "Tactical/TargetTrack"), QoSProfile::BestEffortVolatileSub(sub));
 
     std::cout << "\n==================================================\n";
     std::cout << "   MASTER SUBSCRIBER AKTIF - MENDENGARKAN TOPIC   \n";

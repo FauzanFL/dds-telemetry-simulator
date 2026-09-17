@@ -28,6 +28,7 @@ add_executable(dds_telemetry_simulator
   src/services/publisher/publishers.h src/services/publisher/publishers.cpp
   src/services/subscriber/mastersubscriber.h src/services/subscriber/mastersubscriber.cpp
   src/main.cpp
+  src/config/qos_profiles.h
 )
 target_link_libraries(dds_telemetry_simulator PRIVATE
     CycloneDDS-CXX::ddscxx
