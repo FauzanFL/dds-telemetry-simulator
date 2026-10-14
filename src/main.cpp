@@ -17,7 +17,11 @@ void prepareInputStream() {
 
 int main() {
     try {
-        dds::domain::DomainParticipant participant(0);
+        std::vector<uint8_t> auth_token = {'C', 'M', 'D', '_', '1'};
+
+        dds::domain::qos::DomainParticipantQos dp_qos;
+        dp_qos << dds::core::policy::UserData(auth_token) << dds::core::policy::EntityFactory(false);
+        dds::domain::DomainParticipant participant(0, dp_qos);
 
         while (true) {
             std::cout << "\n=================================\n";

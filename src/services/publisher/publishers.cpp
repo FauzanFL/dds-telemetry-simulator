@@ -11,7 +11,8 @@
 // Grup 1: Reliable & TransientLocal (Manual Input)
 void MissionRoutePub::run() {
     dds::topic::Topic<Ship::MissionRoute> topic(participant_, "Ship/MissionRoute");
-    dds::pub::Publisher publisher(participant_);
+    std::vector<uint8_t> node_info = {'P', 'O', 'R', 'T'};
+    dds::pub::Publisher publisher(participant_, QoSProfile::PubQoS("SensorGroup_A", node_info));
     dds::pub::DataWriter<Ship::MissionRoute> writer(publisher, topic, QoSProfile::MissionRoutePub(publisher));
 
     Ship::MissionRoute data;
@@ -29,7 +30,8 @@ void MissionRoutePub::run() {
 
 void RCWSCommandPub::run() {
     dds::topic::Topic<Weapon::RCWSCommand> topic(participant_, "Weapon/RCWSCommand");
-    dds::pub::Publisher publisher(participant_);
+    std::vector<uint8_t> node_info = {'P', 'O', 'R', 'T'};
+    dds::pub::Publisher publisher(participant_, QoSProfile::PubQoS("SensorGroup_A", node_info));
     dds::pub::DataWriter<Weapon::RCWSCommand> writer(publisher, topic, QoSProfile::RCWSCommandPub(publisher));
 
     Weapon::RCWSCommand data;
@@ -49,7 +51,8 @@ void RCWSCommandPub::run() {
 
 void RCWSStatusPub::run() {
     dds::topic::Topic<Weapon::RCWSStatus> topic(participant_, "Weapon/RCWSStatus");
-    dds::pub::Publisher publisher(participant_);
+    std::vector<uint8_t> node_info = {'P', 'O', 'R', 'T'};
+    dds::pub::Publisher publisher(participant_, QoSProfile::PubQoS("SensorGroup_A", node_info));
     dds::pub::DataWriter<Weapon::RCWSStatus> writer(publisher, topic, QoSProfile::RCWSStatusPub(publisher));
 
     Weapon::RCWSStatus data;
@@ -68,7 +71,8 @@ void RCWSStatusPub::run() {
 // Grup 2: BestEffort & Volatile (Random Setiap 3 Detik)
 void TelemetryPub::run() {
     dds::topic::Topic<Ship::Telemetry> topic(participant_, "Ship/Telemetry");
-    dds::pub::Publisher publisher(participant_);
+    std::vector<uint8_t> node_info = {'P', 'O', 'R', 'T'};
+    dds::pub::Publisher publisher(participant_, QoSProfile::PubQoS("SensorGroup_A", node_info));
     dds::pub::DataWriter<Ship::Telemetry> writer(publisher, topic, QoSProfile::TelemetryPub(publisher));
 
     std::mt19937 rng(std::random_device{}());
@@ -113,7 +117,8 @@ void TelemetryPub::run() {
 
 void TargetTrackPub::run() {
     dds::topic::Topic<Tactical::TargetTrack> topic(participant_, "Tactical/TargetTrack");
-    dds::pub::Publisher publisher(participant_);
+    std::vector<uint8_t> node_info = {'P', 'O', 'R', 'T'};
+    dds::pub::Publisher publisher(participant_, QoSProfile::PubQoS("SensorGroup_A", node_info));
     dds::pub::DataWriter<Tactical::TargetTrack> writer(publisher, topic, QoSProfile::TargetTrackPub(publisher));
 
     std::mt19937 rng(std::random_device{}());
