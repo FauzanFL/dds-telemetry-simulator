@@ -90,6 +90,7 @@ inline dds::sub::qos::DataReaderQos BestEffortVolatileSub(const dds::sub::Subscr
     << dds::core::policy::Reliability::BestEffort()
     << dds::core::policy::Durability::Volatile()
     << dds::core::policy::History::KeepLast(1)
+    << dds::core::policy::LatencyBudget(dds::core::Duration::from_millisecs(10))
     << dds::core::policy::TimeBasedFilter(dds::core::Duration::from_millisecs(100))
     << dds::core::policy::ReaderDataLifecycle(
         dds::core::Duration::from_secs(60),
