@@ -9,7 +9,7 @@ inline dds::pub::qos::PublisherQos PubQoS(const std::string& partition_name, con
     presentation_policy.coherent_access(false);
     presentation_policy.access_scope(dds::core::policy::PresentationAccessScopeKind::INSTANCE);
     return pub_qos
-           << dds::core::policy::Partition({partition_name})
+           // << dds::core::policy::Partition({partition_name})
            << dds::core::policy::GroupData(node_info)
            << presentation_policy;
 }
@@ -20,7 +20,7 @@ inline dds::sub::qos::SubscriberQos SubQoS(const std::string& partition_name, co
     presentation_policy.coherent_access(false);
     presentation_policy.access_scope(dds::core::policy::PresentationAccessScopeKind::INSTANCE);
     return sub_qos
-           << dds::core::policy::Partition({partition_name})
+           // << dds::core::policy::Partition({partition_name})
            << dds::core::policy::GroupData(node_info)
            << presentation_policy;
 }
