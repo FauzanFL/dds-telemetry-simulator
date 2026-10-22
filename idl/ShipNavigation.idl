@@ -1,0 +1,15 @@
+module Niskala {
+  module Navigation {
+    @appendable
+    struct OwnshipTelemetry {
+      @key string ship_id;
+      double latitude;
+      double longitude;
+      float heading_deg;
+      float speed_knots;
+      float roll_deg;
+      float pitch_deg;
+      unsigned long long timestamp_us;
+    };
+  };
+};

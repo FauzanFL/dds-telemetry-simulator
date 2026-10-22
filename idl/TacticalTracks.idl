@@ -1,0 +1,14 @@
+module Niskala {
+  module Tactical {
+    @appendable
+    struct TacticalTrack {
+      @key unsigned long track_id;
+      double latitude;
+      double longitude;
+      float speed_knots;
+      float course_deg;
+      octet identity_classification;
+      unsigned long long timestamp_us;
+    };
+  };
+};

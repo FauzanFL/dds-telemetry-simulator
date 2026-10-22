@@ -19,6 +19,9 @@ idlcxx_generate(
     idl/RCWSStatus.idl
     idl/TargetTrack.idl
     idl/Telemetry.idl
+    idl/WeaponControl.idl
+    idl/ShipNavigation.idl
+    idl/TacticalTracks.idl
 )
 
 add_executable(dds_telemetry_simulator

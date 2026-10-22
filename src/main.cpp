@@ -21,7 +21,7 @@ int main() {
 
         dds::domain::qos::DomainParticipantQos dp_qos;
         dp_qos << dds::core::policy::UserData(auth_token) << dds::core::policy::EntityFactory(false);
-        dds::domain::DomainParticipant participant(0, dp_qos);
+        dds::domain::DomainParticipant participant(27);
 
         while (true) {
             std::cout << "\n=================================\n";
@@ -52,6 +52,7 @@ int main() {
                 std::cout << "3. RCWS Status (Manual Input)\n";
                 std::cout << "4. Telemetry Data (Auto 3s)\n";
                 std::cout << "5. Target Data (Auto 3s)\n";
+                std::cout << "6. Weapon Command (Manual Input)\n";
                 std::cout << "0. Kembali\n";
                 std::cout << "Pilihan: ";
 
@@ -72,6 +73,7 @@ int main() {
                 case 3: publisher = std::make_unique<RCWSStatusPub>(participant); break;
                 case 4: publisher = std::make_unique<TelemetryPub>(participant); break;
                 case 5: publisher = std::make_unique<TargetTrackPub>(participant); break;
+                case 6: publisher = std::make_unique<WeaponCommandPub>(participant); break;
                 default:
                     std::cout << "[ERROR] Pilihan menu tidak tersedia.\n";
                     continue;

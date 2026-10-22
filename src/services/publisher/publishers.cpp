@@ -11,8 +11,8 @@
 // Grup 1: Reliable & TransientLocal (Manual Input)
 void MissionRoutePub::run() {
     dds::topic::Topic<Ship::MissionRoute> topic(participant_, "Ship/MissionRoute");
-    std::vector<uint8_t> node_info = {'P', 'O', 'R', 'T'};
-    dds::pub::Publisher publisher(participant_, QoSProfile::PubQoS("SensorGroup_A", node_info));
+    // std::vector<uint8_t> node_info = {'P', 'O', 'R', 'T'};
+    dds::pub::Publisher publisher(participant_);
     dds::pub::DataWriter<Ship::MissionRoute> writer(publisher, topic, QoSProfile::MissionRoutePub(publisher));
 
     Ship::MissionRoute data;
@@ -30,8 +30,8 @@ void MissionRoutePub::run() {
 
 void RCWSCommandPub::run() {
     dds::topic::Topic<Weapon::RCWSCommand> topic(participant_, "Weapon/RCWSCommand");
-    std::vector<uint8_t> node_info = {'P', 'O', 'R', 'T'};
-    dds::pub::Publisher publisher(participant_, QoSProfile::PubQoS("SensorGroup_A", node_info));
+    // std::vector<uint8_t> node_info = {'P', 'O', 'R', 'T'};
+    dds::pub::Publisher publisher(participant_);
     dds::pub::DataWriter<Weapon::RCWSCommand> writer(publisher, topic, QoSProfile::RCWSCommandPub(publisher));
 
     Weapon::RCWSCommand data;
@@ -51,8 +51,8 @@ void RCWSCommandPub::run() {
 
 void RCWSStatusPub::run() {
     dds::topic::Topic<Weapon::RCWSStatus> topic(participant_, "Weapon/RCWSStatus");
-    std::vector<uint8_t> node_info = {'P', 'O', 'R', 'T'};
-    dds::pub::Publisher publisher(participant_, QoSProfile::PubQoS("SensorGroup_A", node_info));
+    // std::vector<uint8_t> node_info = {'P', 'O', 'R', 'T'};
+    dds::pub::Publisher publisher(participant_);
     dds::pub::DataWriter<Weapon::RCWSStatus> writer(publisher, topic, QoSProfile::RCWSStatusPub(publisher));
 
     Weapon::RCWSStatus data;
@@ -71,8 +71,8 @@ void RCWSStatusPub::run() {
 // Grup 2: BestEffort & Volatile (Random Setiap 3 Detik)
 void TelemetryPub::run() {
     dds::topic::Topic<Ship::Telemetry> topic(participant_, "Ship/Telemetry");
-    std::vector<uint8_t> node_info = {'P', 'O', 'R', 'T'};
-    dds::pub::Publisher publisher(participant_, QoSProfile::PubQoS("SensorGroup_A", node_info));
+    // std::vector<uint8_t> node_info = {'P', 'O', 'R', 'T'};
+    dds::pub::Publisher publisher(participant_);
     dds::pub::DataWriter<Ship::Telemetry> writer(publisher, topic, QoSProfile::TelemetryPub(publisher));
 
     std::mt19937 rng(std::random_device{}());
@@ -117,8 +117,8 @@ void TelemetryPub::run() {
 
 void TargetTrackPub::run() {
     dds::topic::Topic<Tactical::TargetTrack> topic(participant_, "Tactical/TargetTrack");
-    std::vector<uint8_t> node_info = {'P', 'O', 'R', 'T'};
-    dds::pub::Publisher publisher(participant_, QoSProfile::PubQoS("SensorGroup_A", node_info));
+    // std::vector<uint8_t> node_info = {'P', 'O', 'R', 'T'};
+    dds::pub::Publisher publisher(participant_);
     dds::pub::DataWriter<Tactical::TargetTrack> writer(publisher, topic, QoSProfile::TargetTrackPub(publisher));
 
     std::mt19937 rng(std::random_device{}());
@@ -152,4 +152,24 @@ void TargetTrackPub::run() {
         inputThread.join();
     }
     std::cout << "\n[INFO] Menghentikan simulasi TargetTrack...\n";
+}
+
+void WeaponCommandPub::run() {
+    dds::topic::Topic<Niskala::Weapon::RCWSCommand> topic(participant_, "Niskala/Weapon/RCWSCommand");
+    dds::pub::Publisher publisher(participant_);
+    dds::pub::DataWriter<Niskala::Weapon::RCWSCommand> writer(publisher, topic, QoSProfile::commandControlProfile());
+
+    Niskala::Weapon::RCWSCommand data;
+    std::cout << "\n--- Input RCWSCommand ---\n";
+    std::cout << "Ship ID: "; std::cin >> data.ship_id();
+    std::cout << "Sequence ID: "; std::cin >> data.sequence_id();
+    std::cout << "Slew Enable: "; std::cin >> data.slew_enable();
+    std::cout << "Azimuth: "; std::cin >> data.target_azimuth();
+    std::cout << "Elevation: "; std::cin >> data.target_elevation();
+    std::cout << "Fire Auth: "; std::cin >> data.fire_authorize();
+
+    writer.write(data);
+    std::cout << "[SUCCESS] Data RCWSCommand terkirim!\n";
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::cin.get();
 }

@@ -1,0 +1,25 @@
+module Niskala {
+  module Weapon {
+    @appendable
+    struct RCWSCommand {
+      @key string ship_id;
+      @key unsigned long sequence_id;
+      boolean slew_enable;
+      float target_azimuth;
+      float target_elevation;
+      boolean fire_authorize;
+      unsigned long long timestamp_us;
+    };
+
+    @appendable
+    struct RCWSStatus {
+      @key string ship_id;
+      float current_azimuth;
+      float current_elevation;
+      unsigned short ammo_count;
+      octet system_state;
+      boolean interlock_ok;
+      unsigned long long timestamp_us;
+    };
+  };
+};

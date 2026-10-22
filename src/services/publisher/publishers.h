@@ -7,6 +7,7 @@
 #include "RCWSStatus.hpp"
 #include "Telemetry.hpp"
 #include "TargetTrack.hpp"
+#include "WeaponControl.hpp"
 
 class MissionRoutePub : public IPublisher {
 public:
@@ -33,6 +34,12 @@ public:
 };
 
 class TargetTrackPub : public IPublisher {
+public:
+    using IPublisher::IPublisher;
+    void run() override;
+};
+
+class WeaponCommandPub : public IPublisher {
 public:
     using IPublisher::IPublisher;
     void run() override;

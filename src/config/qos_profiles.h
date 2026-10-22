@@ -98,4 +98,30 @@ inline dds::sub::qos::DataReaderQos BestEffortVolatileSub(const dds::sub::Subscr
     << dds::core::policy::TypeConsistencyEnforcement(
            dds::core::policy::TypeConsistencyKind::ALLOW_TYPE_COERCION);
 }
+
+
+inline dds::topic::qos::TopicQos commandControlProfile() {
+    dds::topic::qos::TopicQos qos;
+
+    qos << dds::core::policy::Reliability::Reliable()
+        << dds::core::policy::Durability::TransientLocal()
+        << dds::core::policy::History::KeepLast(10);
+
+    return qos;
+}
+
+inline dds::topic::qos::TopicQos telemetryProfile() {
+    dds::topic::qos::TopicQos qos;
+
+    dds::core::policy::Liveliness liveliness;
+    liveliness.Automatic();
+    liveliness.lease_duration(dds::core::Duration::from_millisecs(200));
+
+    qos << dds::core::policy::Reliability::BestEffort()
+        << dds::core::policy::Durability::Volatile()
+        << dds::core::policy::Deadline(dds::core::Duration::from_millisecs(50))
+        << liveliness;
+
+    return qos;
+}
 }
